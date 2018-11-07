@@ -7,15 +7,18 @@ import ua.kiev.prog.model.TaskList;
 import ua.kiev.prog.model.User;
 import ua.kiev.prog.repository.TaskRepository;
 import ua.kiev.prog.service.TaskService;
+import ua.kiev.prog.service.UserService;
 
 import java.util.List;
 
 @Service
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
+    private final UserService userService;
 
-    public TaskServiceImpl(TaskRepository taskRepository) {
+    public TaskServiceImpl(TaskRepository taskRepository, UserService userService) {
         this.taskRepository = taskRepository;
+        this.userService = userService;
     }
 
     @Transactional
@@ -46,7 +49,10 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task createTask (Task task, TaskList taskList){
         if (task.getExecutor()!=null){
-            task.getExecutor().getAssignedTasks().add(task);
+            String id = task.getExecutor().getId();
+            User executor = userService.getUserById(id);
+            executor.getAssignedTasks().add(task);
+            task.setExecutor(executor);
         }
         taskList.addTask(task);
         task.setTaskList(taskList);
