@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class MailNotifier implements Notifier {
-    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(10);
+    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
 
     @Override
